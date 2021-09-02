@@ -12,7 +12,6 @@ namespace SeedDatabase.Data.Repository
     {
         protected readonly SeedDatabaseContext _context;
         protected readonly ILogger<SeedDatabaseRepository<T>> _logger;
-
         public SeedDatabaseRepository(IServiceScopeFactory factory, ILogger<SeedDatabaseRepository<T>> logger)
         {
             _context = factory.CreateScope().ServiceProvider.GetRequiredService<SeedDatabaseContext>();

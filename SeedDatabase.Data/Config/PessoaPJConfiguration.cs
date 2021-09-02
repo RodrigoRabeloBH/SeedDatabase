@@ -8,7 +8,7 @@ namespace SeedDatabase.Data.Config
     {
         public void Configure(EntityTypeBuilder<Pessoa_PJ> builder)
         {
-            builder.HasKey(pj => pj.Id_Pessoa);
+            builder.HasKey(pj => pj.Id_Pessoa_PJ);
         }
     }
 }

@@ -13,6 +13,10 @@ namespace SeedDatabase.Data.Extensions
         {
             services.AddTransient<IPessoaRepository, PessoaRepository>();
 
+            services.AddTransient<IPessoaPFRepository, PessoaPFRepository>();
+
+            services.AddTransient<IDocumentoRepository, DocumentoRepository>();
+
             services.AddDbContext<SeedDatabaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             return services;

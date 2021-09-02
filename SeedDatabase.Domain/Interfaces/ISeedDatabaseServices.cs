@@ -8,5 +8,6 @@ namespace SeedDatabase.Domain.Interfaces
         IEnumerable<Pessoa> BuildPersonList(int quantity);
         IEnumerable<Pessoa_PF> BuildPersonPFList(int quantity);
         IEnumerable<Pessoa_PJ> BuildPersonPJList(int quantity);
+        IEnumerable<Documento> BuildDocuemntList(int quantity);
     }
 }
