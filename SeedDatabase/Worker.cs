@@ -1,10 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SeedDatabase.Domain.Interfaces;
-using SeedDatabase.Domain.Models;
 
 namespace SeedDatabase
 {
@@ -23,17 +23,27 @@ namespace SeedDatabase
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            int i = 0;
+
+            while (!stoppingToken.IsCancellationRequested && i != 1)
             {
+                Stopwatch stopwatch = new Stopwatch();
+
+                stopwatch.Start();
+
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
                 var persons = _services.BuildPersonList(1000000);
 
                 await _rep.SeedData(persons);
 
-                _logger.LogInformation("Worker finished at: {time}", DateTimeOffset.Now);                
+                stopwatch.Stop();
 
-                await Task.Delay(1000 * 60 * 10, stoppingToken);
+                _logger.LogInformation("Worker finished at: {time} minutes", stopwatch.ElapsedMilliseconds / 60000);
+
+                i = 1;
+
+                await Task.Delay(1000, stoppingToken);
             }
         }
     }

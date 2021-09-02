@@ -1,11 +1,8 @@
 using System.IO;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SeedDatabase.Data.Context;
 using SeedDatabase.Data.Extensions;
-using SeedDatabase.Data.Repository;
 using SeedDatabase.Domain.Interfaces;
 using SeedDatabase.Services;
 
