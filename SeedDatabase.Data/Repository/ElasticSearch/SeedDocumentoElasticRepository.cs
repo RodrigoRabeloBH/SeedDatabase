@@ -1,27 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Nest;
 using SeedDatabase.Domain.Interfaces;
 using SeedDatabase.Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SeedDatabase.Data.Repository.ElasticSearch
 {
-    public class SeedPessoaElasticRepository : ISeedPessoaElasticRepository
+    public class SeedDocumentoElasticRepository : ISeedDocumentoElasticRepository
     {
-        private readonly ILogger<SeedPessoaElasticRepository> _logger;
+        private readonly ILogger<SeedDocumentoElasticRepository> _logger;
         private readonly IElasticClient _elasticClient;
         private readonly IConfiguration _configuration;
-        public SeedPessoaElasticRepository(
-            ILogger<SeedPessoaElasticRepository> logger, 
-            IConfiguration configuration
-            )
+
+        public SeedDocumentoElasticRepository(ILogger<SeedDocumentoElasticRepository> logger, IElasticClient elasticClient, IConfiguration configuration)
         {
             _configuration = configuration;
             var settings = new ConnectionSettings(new Uri(_configuration["ElastichSearchSettings:Uri"]));
-            var defaultIndex = "pessoa";
+            var defaultIndex = "documento";
             var basicAuthUser = _configuration["ElastichSearchSettings:Username"];
             var basicAuthPassword = _configuration["ElastichSearchSettings:Password"];
             settings.DefaultIndex(defaultIndex);
@@ -30,14 +29,13 @@ namespace SeedDatabase.Data.Repository.ElasticSearch
             _logger = logger;
             _elasticClient = new ElasticClient(settings);
         }
-
-        public async Task SeedData(IEnumerable<Pessoa> pessoas)
+        public async Task SeedData(IEnumerable<Documento> documentos)
         {
             try
             {
-                foreach (var pessoa in pessoas)
+                foreach (var documento in documentos)
                 {
-                    var response = await _elasticClient.IndexDocumentAsync(pessoa);
+                    var response = await _elasticClient.IndexDocumentAsync(documento);
                 }
             }
             catch (Exception ex)
@@ -45,5 +43,7 @@ namespace SeedDatabase.Data.Repository.ElasticSearch
                 _logger.LogError(ex, ex.Message);
             }
         }
+
     }
 }
+

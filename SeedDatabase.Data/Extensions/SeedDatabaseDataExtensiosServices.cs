@@ -27,14 +27,14 @@ namespace SeedDatabase.Data.Extensions
             services.AddTransient<ISeedDocumentoMongoDBRepository, SeedDocumentoMongoDBRepository>();
 
             services.AddTransient<ISeedPessoaElasticRepository, SeedPessoaElasticRepository>();
+            services.AddTransient<ISeedDocumentoElasticRepository, SeedDocumentoElasticRepository>();
+            services.AddTransient<ISeedPessoaPFElasticRepository, SeedPessoaPFElasticRepository>();
 
             services.AddDbContext<SeedDatabaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSingleton<IMongoClient>(new MongoClient(configuration.GetConnectionString("MongoConnection")));
 
-            var elasticClient = new ElasticClient(BuildElasticSettings(configuration));
-
-            services.AddSingleton<IElasticClient>(elasticClient);
+            services.AddSingleton<IElasticClient>(new ElasticClient());
 
             return services;
         }

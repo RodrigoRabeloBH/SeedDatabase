@@ -11,19 +11,49 @@ namespace SeedDatabase.Services
     {
         private readonly ILogger<SeedDatabaseElasticSearchServices> _logger;
         private readonly ISeedPessoaElasticRepository _pessoaRepository;
+        private readonly ISeedDocumentoElasticRepository _documentoRepository;
+        private readonly ISeedPessoaPFElasticRepository _pessoaPFRepository;
         private readonly ISeedDatabaseServices _services;
 
-        public SeedDatabaseElasticSearchServices(ILogger<SeedDatabaseElasticSearchServices> logger,
-                                                 ISeedPessoaElasticRepository pessoaRepository, ISeedDatabaseServices services)
+        public SeedDatabaseElasticSearchServices(
+            ILogger<SeedDatabaseElasticSearchServices> logger,
+            ISeedPessoaElasticRepository pessoaRepository,
+            ISeedPessoaPFElasticRepository pessoaPFRepository,
+            ISeedDocumentoElasticRepository documentoRepository,
+            ISeedDatabaseServices services)
         {
             _logger = logger;
             _pessoaRepository = pessoaRepository;
+            _pessoaPFRepository = pessoaPFRepository;
+            _documentoRepository = documentoRepository;
             _services = services;
         }
 
-        public Task InsertDocuments(int quantity)
+        public async Task InsertDocuments(int quantity)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                Stopwatch stopwatch = new Stopwatch();
+
+                stopwatch.Start();
+
+                _logger.LogInformation("Inicio de insert de documentos no ElasticSearch {time}", DateTime.UtcNow);
+
+                var documents = _services.BuildDocumentList(quantity);
+
+                await _documentoRepository.SeedData(documents);
+
+                stopwatch.Stop();
+
+                _logger.LogInformation("Fim do processo as {time}", DateTime.UtcNow);
+
+                _logger.LogInformation("Tempo decorrido do processo: {time} seconds", stopwatch.ElapsedMilliseconds / 1000);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
         }
 
         public async Task InsertPersons(int quantity)
@@ -34,7 +64,7 @@ namespace SeedDatabase.Services
 
                 stopwatch.Start();
 
-                _logger.LogInformation("Inicio de insert de pessoas no MongoDB {time}", DateTime.UtcNow);
+                _logger.LogInformation("Inicio de insert de pessoas no ElasticSearch {time}", DateTime.UtcNow);
 
                 var persons = _services.BuildPersonList(quantity);
 
@@ -53,9 +83,31 @@ namespace SeedDatabase.Services
             }
         }
 
-        public Task InsertPersonsPF(int quantity)
+        public async Task InsertPersonsPF(int quantity)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                Stopwatch stopwatch = new Stopwatch();
+
+                stopwatch.Start();
+
+                _logger.LogInformation("Inicio de insert de pessoas no ElasticSearch {time}", DateTime.UtcNow);
+
+                var persons = _services.BuildPersonPFList(quantity);
+
+                await _pessoaPFRepository.SeedData(persons);
+
+                stopwatch.Stop();
+
+                _logger.LogInformation("Fim do processo as {time}", DateTime.UtcNow);
+
+                _logger.LogInformation("Tempo decorrido do processo: {time} seconds", stopwatch.ElapsedMilliseconds / 1000);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
         }
     }
 }
