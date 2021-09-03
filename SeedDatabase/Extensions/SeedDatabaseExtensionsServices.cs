@@ -12,6 +12,8 @@ namespace SeedDatabase.Extensions
 
             services.AddTransient<ISeedDatabaseMongoDBServices, SeedDatabaseMongoDBServices>();
 
+            services.AddTransient<ISeedDatabaseElasticSearchServices, SeedDatabaseElasticSearchServices>();
+
             services.AddTransient<ISeedDatabaseServices, SeedDatabaseServices>();
 
             return services;

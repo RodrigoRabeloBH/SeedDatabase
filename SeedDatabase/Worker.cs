@@ -12,14 +12,17 @@ namespace SeedDatabase
         private readonly ILogger<Worker> _logger;
         private readonly ISeedDatabaseMongoDBServices _mongoServices;
         private readonly ISeedDatabaseSQLServerServices _sqlServerServices;
-        public Worker(ILogger<Worker> logger,
-                      ISeedDatabaseMongoDBServices mongoServices,
-                      ISeedDatabaseSQLServerServices sqlServerServices)
+        private readonly ISeedDatabaseElasticSearchServices _elasticServices;
+
+        public Worker(ILogger<Worker> logger, ISeedDatabaseMongoDBServices mongoServices,
+                      ISeedDatabaseSQLServerServices sqlServerServices, ISeedDatabaseElasticSearchServices elasticServices)
         {
             _logger = logger;
             _mongoServices = mongoServices;
             _sqlServerServices = sqlServerServices;
+            _elasticServices = elasticServices;
         }
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             int i = 0;

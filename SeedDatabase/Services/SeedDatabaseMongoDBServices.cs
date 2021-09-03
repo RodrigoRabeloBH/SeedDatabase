@@ -63,7 +63,7 @@ namespace SeedDatabase.Services
 
                 _logger.LogInformation("Fim do processo as {time}", DateTime.UtcNow);
 
-                _logger.LogInformation("Tempo decorrido do processo: {time}", stopwatch.ElapsedMilliseconds);
+                _logger.LogInformation("Tempo decorrido do processo: {time} seconds", stopwatch.ElapsedMilliseconds / 1000);
 
             }
             catch (Exception ex)
