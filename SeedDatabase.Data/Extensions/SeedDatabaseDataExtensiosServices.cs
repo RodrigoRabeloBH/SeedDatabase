@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
@@ -23,11 +22,15 @@ namespace SeedDatabase.Data.Extensions
             services.AddTransient<IDocumentoRepository, DocumentoRepository>();
 
             services.AddTransient<ISeedPessoaMongoDBRepository, SeedPessoaMongoDBRepository>();
+
             services.AddTransient<ISeedPessoaPFMongoDBRepository, SeedPessoaPFMongoDBRepository>();
+
             services.AddTransient<ISeedDocumentoMongoDBRepository, SeedDocumentoMongoDBRepository>();
 
             services.AddTransient<ISeedPessoaElasticRepository, SeedPessoaElasticRepository>();
+
             services.AddTransient<ISeedDocumentoElasticRepository, SeedDocumentoElasticRepository>();
+
             services.AddTransient<ISeedPessoaPFElasticRepository, SeedPessoaPFElasticRepository>();
 
             services.AddDbContext<SeedDatabaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
