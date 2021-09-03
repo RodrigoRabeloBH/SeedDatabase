@@ -87,7 +87,7 @@ namespace SeedDatabase.Services
 
                 _logger.LogInformation("Inicio de insert de pessoas PF no SQL Server {time}", DateTime.UtcNow);
 
-                var documentos = _services.BuildDocuemntList(quantity);
+                var documentos = _services.BuildDocumentList(quantity);
 
                 await _documentoRepository.SeedData(documentos);
 

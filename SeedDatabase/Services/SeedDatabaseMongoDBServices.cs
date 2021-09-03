@@ -10,20 +10,40 @@ namespace SeedDatabase.Services
     {
         private readonly ILogger<SeedDatabaseMongoDBServices> _logger;
         private readonly ISeedPessoaMongoDBRepository _pessoaRepository;
+        private readonly ISeedPessoaPFMongoDBRepository _pessoaPFRepository;
+        private readonly ISeedDocumentoMongoDBRepository _documentoRepository;
         private readonly ISeedDatabaseServices _services;
 
         public SeedDatabaseMongoDBServices(ILogger<SeedDatabaseMongoDBServices> logger,
                                           ISeedPessoaMongoDBRepository pessoaRepository,
+                                          ISeedPessoaPFMongoDBRepository pessoaPFRepository,
+                                          ISeedDocumentoMongoDBRepository documentoMongoDBRepository,
                                           ISeedDatabaseServices services)
         {
             _logger = logger;
             _pessoaRepository = pessoaRepository;
+            _pessoaPFRepository = pessoaPFRepository;
+            _documentoRepository = documentoMongoDBRepository;
             _services = services;
         }
 
-        public Task InsertDocuments(int quantity)
+        public async Task InsertDocuments(int quantity)
         {
-            throw new System.NotImplementedException();
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
+            _logger.LogInformation("Inicio de insert de documentos no MongoDB {time}", DateTime.UtcNow);
+
+            var documentos = _services.BuildDocumentList(quantity);
+
+            await _documentoRepository.SeedData(documentos);
+
+            stopwatch.Stop();
+
+            _logger.LogInformation("Fim do processo as: {time}", DateTime.UtcNow);
+
+            _logger.LogInformation("Tempo decorrido do processo: {time} segundos", stopwatch.ElapsedMilliseconds / 1000);
         }
         public async Task InsertPersons(int quantity)
         {
@@ -51,9 +71,30 @@ namespace SeedDatabase.Services
                 _logger.LogError(ex, ex.Message);
             }
         }
-        public Task InsertPersonsPF(int quantity)
+        public async Task InsertPersonsPF(int quantity)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                Stopwatch stopwatch = new Stopwatch();
+
+                stopwatch.Start();
+
+                _logger.LogInformation("Inicio de insert de pessoas físicas no MongoDB {time}", DateTime.UtcNow);
+
+                var pessoasPF = _services.BuildPersonPFList(quantity);
+
+                await _pessoaPFRepository.SeedData(pessoasPF);
+
+                stopwatch.Stop();
+
+                _logger.LogInformation("Fim do processo as {time}", DateTime.UtcNow);
+
+                _logger.LogInformation("Tempo decorrido do processo: {time}", stopwatch.ElapsedMilliseconds);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
         }
     }
 }

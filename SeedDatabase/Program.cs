@@ -30,12 +30,6 @@ namespace SeedDatabase
                            services.AddSeedDatabaseDataExtensionsServices(configuration);
 
                            services.AddHostedService<Worker>();
-
-                           //    services.AddSingleton<IMongoClient>(serviceProvider =>
-                           //    {
-                           //        var settings = configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
-                           //        return new MongoClient(settings.ConnectionString);
-                           //    });
                        });
         }
 

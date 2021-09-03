@@ -20,6 +20,8 @@ namespace SeedDatabase.Data.Extensions
             services.AddTransient<IDocumentoRepository, DocumentoRepository>();
 
             services.AddTransient<ISeedPessoaMongoDBRepository, SeedPessoaMongoDBRepository>();
+            services.AddTransient<ISeedPessoaPFMongoDBRepository, SeedPessoaPFMongoDBRepository>();
+            services.AddTransient<ISeedDocumentoMongoDBRepository, SeedDocumentoMongoDBRepository>();
 
             services.AddDbContext<SeedDatabaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 

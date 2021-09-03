@@ -87,7 +87,7 @@ namespace SeedDatabase.Services
         {
             throw new NotImplementedException();
         }
-        public IEnumerable<Documento> BuildDocuemntList(int quantity)
+        public IEnumerable<Documento> BuildDocumentList(int quantity)
         {
             List<Documento> documentos = new List<Documento>();
 
