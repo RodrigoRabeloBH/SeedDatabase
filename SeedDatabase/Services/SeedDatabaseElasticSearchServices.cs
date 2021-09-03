@@ -1,20 +1,20 @@
 using System;
 using System.Diagnostics;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SeedDatabase.Domain.Interfaces;
 
 namespace SeedDatabase.Services
 {
-    public class SeedDatabaseMongoDBServices : ISeedDatabaseMongoDBServices
+    public class SeedDatabaseElasticSearchServices : ISeedDatabaseElasticSearchServices
     {
-        private readonly ILogger<SeedDatabaseMongoDBServices> _logger;
-        private readonly ISeedPessoaMongoDBRepository _pessoaRepository;
+        private readonly ILogger<SeedDatabaseElasticSearchServices> _logger;
+        private readonly ISeedPessoaElasticRepository _pessoaRepository;
         private readonly ISeedDatabaseServices _services;
 
-        public SeedDatabaseMongoDBServices(ILogger<SeedDatabaseMongoDBServices> logger,
-                                          ISeedPessoaMongoDBRepository pessoaRepository,
-                                          ISeedDatabaseServices services)
+        public SeedDatabaseElasticSearchServices(ILogger<SeedDatabaseElasticSearchServices> logger,
+                                                 ISeedPessoaElasticRepository pessoaRepository, ISeedDatabaseServices services)
         {
             _logger = logger;
             _pessoaRepository = pessoaRepository;
@@ -25,6 +25,7 @@ namespace SeedDatabase.Services
         {
             throw new System.NotImplementedException();
         }
+
         public async Task InsertPersons(int quantity)
         {
             try
@@ -35,9 +36,9 @@ namespace SeedDatabase.Services
 
                 _logger.LogInformation("Inicio de insert de pessoas no MongoDB {time}", DateTime.UtcNow);
 
-                var pessoas = _services.BuildPersonList(quantity);
+                var persons = _services.BuildPersonList(quantity);
 
-                await _pessoaRepository.SeedData(pessoas);
+                await _pessoaRepository.SeedData(persons);
 
                 stopwatch.Stop();
 
@@ -51,6 +52,7 @@ namespace SeedDatabase.Services
                 _logger.LogError(ex, ex.Message);
             }
         }
+
         public Task InsertPersonsPF(int quantity)
         {
             throw new System.NotImplementedException();
