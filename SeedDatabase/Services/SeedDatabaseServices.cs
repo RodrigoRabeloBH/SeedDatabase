@@ -48,7 +48,6 @@ namespace SeedDatabase.Services
 
             return persons;
         }
-
         public IEnumerable<Pessoa_PF> BuildPersonPFList(int quantity)
         {
             List<Pessoa_PF> persons = new List<Pessoa_PF>();
@@ -84,12 +83,10 @@ namespace SeedDatabase.Services
 
             return persons;
         }
-
         public IEnumerable<Pessoa_PJ> BuildPersonPJList(int quantity)
         {
             throw new NotImplementedException();
         }
-
         public IEnumerable<Documento> BuildDocuemntList(int quantity)
         {
             List<Documento> documentos = new List<Documento>();

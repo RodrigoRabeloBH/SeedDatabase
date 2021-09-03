@@ -3,8 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SeedDatabase.Data.Extensions;
-using SeedDatabase.Domain.Interfaces;
-using SeedDatabase.Services;
+using SeedDatabase.Extensions;
 
 namespace SeedDatabase
 {
@@ -26,11 +25,17 @@ namespace SeedDatabase
 
                            IConfiguration configuration = configurationBuilder.Build();
 
-                           services.AddTransient<ISeedDatabaseServices, SeedDatabaseServices>();
+                           services.AddSeedDatabaseExtensionsServices();
 
                            services.AddSeedDatabaseDataExtensionsServices(configuration);
 
                            services.AddHostedService<Worker>();
+
+                           //    services.AddSingleton<IMongoClient>(serviceProvider =>
+                           //    {
+                           //        var settings = configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
+                           //        return new MongoClient(settings.ConnectionString);
+                           //    });
                        });
         }
 
