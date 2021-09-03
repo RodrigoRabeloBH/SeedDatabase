@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Nest;
+using SeedDatabase.Data.Settings;
 using SeedDatabase.Domain.Interfaces;
 using SeedDatabase.Domain.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SeedDatabase.Data.Repository.ElasticSearch
@@ -14,20 +13,10 @@ namespace SeedDatabase.Data.Repository.ElasticSearch
     {
         private readonly ILogger<SeedDocumentoElasticRepository> _logger;
         private readonly IElasticClient _elasticClient;
-        private readonly IConfiguration _configuration;
-
-        public SeedDocumentoElasticRepository(ILogger<SeedDocumentoElasticRepository> logger, IElasticClient elasticClient, IConfiguration configuration)
+        public SeedDocumentoElasticRepository(ILogger<SeedDocumentoElasticRepository> logger)
         {
-            _configuration = configuration;
-            var settings = new ConnectionSettings(new Uri(_configuration["ElastichSearchSettings:Uri"]));
-            var defaultIndex = "documento";
-            var basicAuthUser = _configuration["ElastichSearchSettings:Username"];
-            var basicAuthPassword = _configuration["ElastichSearchSettings:Password"];
-            settings.DefaultIndex(defaultIndex);
-            settings.BasicAuthentication(basicAuthUser, basicAuthPassword);
-
             _logger = logger;
-            _elasticClient = new ElasticClient(settings);
+            _elasticClient = new ElasticClient(ElastichSearchSettings.BuildElasticSettings("documento"));
         }
         public async Task SeedData(IEnumerable<Documento> documentos)
         {
@@ -43,7 +32,6 @@ namespace SeedDatabase.Data.Repository.ElasticSearch
                 _logger.LogError(ex, ex.Message);
             }
         }
-
     }
 }
 

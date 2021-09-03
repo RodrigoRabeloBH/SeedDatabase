@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Nest;
+using SeedDatabase.Data.Settings;
 using SeedDatabase.Domain.Interfaces;
 using SeedDatabase.Domain.Models;
 
@@ -13,24 +13,11 @@ namespace SeedDatabase.Data.Repository.ElasticSearch
     {
         private readonly ILogger<SeedPessoaElasticRepository> _logger;
         private readonly IElasticClient _elasticClient;
-        private readonly IConfiguration _configuration;
-        public SeedPessoaElasticRepository(
-            ILogger<SeedPessoaElasticRepository> logger, 
-            IConfiguration configuration
-            )
+        public SeedPessoaElasticRepository(ILogger<SeedPessoaElasticRepository> logger)
         {
-            _configuration = configuration;
-            var settings = new ConnectionSettings(new Uri(_configuration["ElastichSearchSettings:Uri"]));
-            var defaultIndex = "pessoa";
-            var basicAuthUser = _configuration["ElastichSearchSettings:Username"];
-            var basicAuthPassword = _configuration["ElastichSearchSettings:Password"];
-            settings.DefaultIndex(defaultIndex);
-            settings.BasicAuthentication(basicAuthUser, basicAuthPassword);
-
             _logger = logger;
-            _elasticClient = new ElasticClient(settings);
+            _elasticClient = new ElasticClient(ElastichSearchSettings.BuildElasticSettings("pessoa"));
         }
-
         public async Task SeedData(IEnumerable<Pessoa> pessoas)
         {
             try

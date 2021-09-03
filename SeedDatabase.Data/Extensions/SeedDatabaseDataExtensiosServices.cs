@@ -38,22 +38,5 @@ namespace SeedDatabase.Data.Extensions
 
             return services;
         }
-
-        private static ConnectionSettings BuildElasticSettings(IConfiguration configuration)
-        {
-            var settings = new ConnectionSettings(new Uri(configuration["ElastichSearchSettings:Uri"]));
-
-            var defaultIndex = configuration["ElastichSearchSettings:DefaultIndex"];
-
-            var basicAuthUser = configuration["ElastichSearchSettings:Username"];
-
-            var basicAuthPassword = configuration["ElastichSearchSettings:Password"];
-
-            if (!string.IsNullOrEmpty(defaultIndex)) settings = settings.DefaultIndex(defaultIndex);
-
-            if (!string.IsNullOrEmpty(basicAuthUser) && !string.IsNullOrEmpty(basicAuthPassword)) settings.BasicAuthentication(basicAuthUser, basicAuthPassword);
-
-            return settings;
-        }
     }
 }
