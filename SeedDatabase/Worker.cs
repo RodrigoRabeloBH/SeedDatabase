@@ -28,7 +28,7 @@ namespace SeedDatabase
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-                await _mongoServices.InsertPersons(1000);
+                await _mongoServices.InsertPersons(1000000);
 
                 i = 1;
 

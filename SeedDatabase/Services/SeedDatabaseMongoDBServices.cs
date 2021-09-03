@@ -35,7 +35,7 @@ namespace SeedDatabase.Services
 
                 _logger.LogInformation("Inicio de insert de pessoas no MongoDB {time}", DateTime.UtcNow);
 
-                var pessoas = _services.BuildPersonList(1000);
+                var pessoas = _services.BuildPersonList(quantity);
 
                 await _pessoaRepository.SeedData(pessoas);
 
@@ -43,7 +43,7 @@ namespace SeedDatabase.Services
 
                 _logger.LogInformation("Fim do processo as {time}", DateTime.UtcNow);
 
-                _logger.LogInformation("Tempo decorrido do processo: {time} segundos", stopwatch.ElapsedMilliseconds / 1000);
+                _logger.LogInformation("Tempo decorrido do processo: {time}", stopwatch.ElapsedMilliseconds);
 
             }
             catch (Exception ex)
