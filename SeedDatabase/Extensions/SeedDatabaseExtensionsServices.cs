@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using SeedDatabase.Domain.Interfaces;
+using SeedDatabase.Helpers;
 using SeedDatabase.Services;
 
 namespace SeedDatabase.Extensions
@@ -8,13 +10,11 @@ namespace SeedDatabase.Extensions
     {
         public static IServiceCollection AddSeedDatabaseExtensionsServices(this IServiceCollection services)
         {
-            services.AddTransient<ISeedDatabaseSQLServerServices, SeedDatabaseSQLServerServices>();
-
-            services.AddTransient<ISeedDatabaseMongoDBServices, SeedDatabaseMongoDBServices>();
-
-            services.AddTransient<ISeedDatabaseElasticSearchServices, SeedDatabaseElasticSearchServices>();
-
             services.AddTransient<ISeedDatabaseServices, SeedDatabaseServices>();
+
+            services.AddTransient<IApplicationServices, ApplicationServices>();
+
+            services.AddAutoMapper(typeof(MappingProfiles));
 
             return services;
         }

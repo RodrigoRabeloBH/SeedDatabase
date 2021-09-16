@@ -1,8 +1,10 @@
-﻿using System;
+using System;
+using SeedDatabase.Domain.Models;
 
-namespace SeedDatabase.Domain.Models
+namespace SeedDatabase.Data.Model
 {
-    public class Pessoa
+    [BsonCollection("Pessoa")]
+    public class PessoaDbModel : Document
     {
         public Guid Id_Pessoa { get; set; }
         public int Id_Situacao_Pessoa { get; set; }

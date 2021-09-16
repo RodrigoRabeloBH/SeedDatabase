@@ -2,7 +2,10 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using SeedDatabase.Data.Extensions;
+using SeedDatabase.Domain.Interfaces;
+using SeedDatabase.Domain.Models;
 using SeedDatabase.Extensions;
 
 namespace SeedDatabase
@@ -28,6 +31,11 @@ namespace SeedDatabase
                            services.AddSeedDatabaseExtensionsServices();
 
                            services.AddSeedDatabaseDataExtensionsServices(configuration);
+
+                           services.Configure<MongoDbSettings>(configuration.GetSection("MongoDbSettings"));
+
+                           services.AddSingleton<IMongoDbSettings>(serviceProvider =>
+                               serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
                            services.AddHostedService<Worker>();
                        });

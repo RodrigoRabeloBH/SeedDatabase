@@ -1,8 +1,10 @@
 using System;
+using SeedDatabase.Domain.Models;
 
-namespace SeedDatabase.Domain.Models
+namespace SeedDatabase.Data.Model
 {
-    public class Documento
+    [BsonCollection("Documento")]
+    public class DocumentoDbModel : Document
     {
         public Guid Id_Documento { get; set; }
         public int Id_Tipo_Documento { get; set; }

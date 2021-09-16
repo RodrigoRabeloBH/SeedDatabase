@@ -87,11 +87,9 @@ namespace SeedDatabase.Services
         {
             throw new NotImplementedException();
         }
-        public IEnumerable<Documento> BuildDocumentList(int quantity)
+        public IEnumerable<Documento> BuildDocumentList(int quantity, Guid idPessoa)
         {
-            List<Documento> documentos = new List<Documento>();
-
-            Guid idPessoa = Guid.Parse("B81CD9AA-F23F-4B5B-AC54-00001F4EB09E");
+            List<Documento> documentos = new List<Documento>();           
 
             try
             {
