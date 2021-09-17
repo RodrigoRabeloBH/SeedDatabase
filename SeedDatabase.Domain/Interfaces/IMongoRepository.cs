@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using MongoDB.Bson;
@@ -8,6 +9,7 @@ namespace SeedDatabase.Domain.Interfaces
 {
     public interface IMongoRepository<T> where T : IDocument
     {
+        IQueryable<T> AsQueryable();
         Task InsertOneAsync(T document);
         Task InsertManyAsync(IEnumerable<T> documents);
         Task ReplaceOneAsync(T document, ObjectId objectId);

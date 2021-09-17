@@ -5,8 +5,8 @@ namespace SeedDatabase.Domain.Models
     public class Pessoa
     {
         public Guid Id_Pessoa { get; set; }
-        public int Id_Situacao_Pessoa { get; set; }
-        public int? Id_Motivo_Cancelamento { get; set; }
+        public short? Id_Situacao_Pessoa { get; set; }
+        public short? Id_Motivo_Cancelamento { get; set; }
         public Guid Id_Canal_Inclusao { get; set; }
         public string Cd_Pais { get; set; }
         public string Tipo_Pessoa { get; set; }

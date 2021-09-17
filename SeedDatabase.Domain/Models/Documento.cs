@@ -5,7 +5,7 @@ namespace SeedDatabase.Domain.Models
     public class Documento
     {
         public Guid Id_Documento { get; set; }
-        public int Id_Tipo_Documento { get; set; }
+        public short Id_Tipo_Documento { get; set; }
         public string Num_Documento { get; set; }
         public string Cd_Pais { get; set; }
         public string Sigla_Estado { get; set; }

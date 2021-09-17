@@ -49,13 +49,13 @@ namespace SeedDatabase.Services
 
             stopWatch.Start();
 
-            await _mongoPessoaRepository.InsertManyAsync(peoples);
+            // await _mongoPessoaRepository.InsertManyAsync(peoples);
 
-            await _mongoDocumentoRepository.InsertManyAsync(documents);
+            // await _mongoDocumentoRepository.InsertManyAsync(documents);
 
             var pessoas = await _mongoPessoaRepository.GetAll();
 
-            var documentos = await _mongoDocumentoRepository.GetAll();
+            // var documentos = await _mongoDocumentoRepository.GetAll();
 
             stopWatch.Stop();
 
@@ -79,9 +79,9 @@ namespace SeedDatabase.Services
 
             await _sqlDocumentoRepository.InsertMany(documents);
 
-            // var pessoas = await _sqlPessoaRepository.FindAll();
+            var pessoas = await _sqlPessoaRepository.FindAll();
 
-            // var documentos = await _sqlDocumentoRepository.FindAll();
+            var documentos = await _sqlDocumentoRepository.FindAll();
 
             stopWatch.Stop();
 
