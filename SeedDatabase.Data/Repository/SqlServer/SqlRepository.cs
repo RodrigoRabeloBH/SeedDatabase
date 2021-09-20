@@ -3,8 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SeedDatabase.Data.Context;
 using SeedDatabase.Domain.Interfaces;
+using SeedDatabase.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -20,9 +22,31 @@ namespace SeedDatabase.Data.Repository
 
             _logger = logger;
         }
-        public Task Delete(T entity)
+        public async Task Delete(T entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Set<T>().Remove(entity);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+        }
+        public async Task DeleteMany(IEnumerable<T> data)
+        {
+            try
+            {
+                _context.Set<T>().RemoveRange(data);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
         }
         public async Task<IEnumerable<T>> FindAll()
         {
@@ -53,18 +77,6 @@ namespace SeedDatabase.Data.Repository
             }
 
             return (T)entity;
-        }
-        public async Task<IEnumerable<T>> GetAll()
-        {
-            try
-            {
-                return await _context.Set<T>().ToListAsync();
-            }
-            catch (System.Exception)
-            {
-
-                throw;
-            }
         }
         public async Task InsertOne(T entity)
         {
@@ -107,6 +119,35 @@ namespace SeedDatabase.Data.Repository
             {
                 _logger.LogError(ex, ex.Message);
             }
+        }
+        public async Task UpdateMany(IEnumerable<T> data)
+        {
+            try
+            {
+                _context.Set<T>().UpdateRange(data);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+        }
+        public async Task<IEnumerable<Documento>> GetDocumentsWithPersons()
+        {
+            IEnumerable<Documento> documentos = null;
+
+            try
+            {
+                documentos = await _context.Set<Documento>()
+                    .Include(p => p.Pessoa)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return documentos;
         }
     }
 }

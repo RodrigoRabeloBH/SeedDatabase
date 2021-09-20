@@ -16,6 +16,6 @@ namespace SeedDatabase.Domain.Models
         public DateTime? Dt_Exclusao_Registro { get; set; }
         public string Cd_Resp_Inclusao { get; set; }
         public string Desc_Motivo_Cancelamento { get; set; }
-        public string Txt_Observacao { get; set; }
+        public string Txt_Observacao { get; set; }        
     }
 }

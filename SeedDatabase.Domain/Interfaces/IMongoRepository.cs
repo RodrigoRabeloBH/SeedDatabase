@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using SeedDatabase.Domain.Models;
 
 namespace SeedDatabase.Domain.Interfaces
 {
@@ -12,6 +13,7 @@ namespace SeedDatabase.Domain.Interfaces
         IQueryable<T> AsQueryable();
         Task InsertOneAsync(T document);
         Task InsertManyAsync(IEnumerable<T> documents);
+        Task UpdateManyAsync(ObjectId objectId);
         Task ReplaceOneAsync(T document, ObjectId objectId);
         Task DeleteOneAsync(Expression<Func<T, bool>> filterExpression);
         Task DeleteByIdAsync(string id);
@@ -20,5 +22,6 @@ namespace SeedDatabase.Domain.Interfaces
         Task<IEnumerable<T>> GetAll();
         Task<T> FindOneAsync(Expression<Func<T, bool>> filterExpression);
         Task<T> FindByIdAsync(string id);
+        IEnumerable<Documento> FilterJoin();
     }
 }

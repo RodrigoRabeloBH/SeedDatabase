@@ -6,5 +6,6 @@ namespace SeedDatabase.Domain.Models
     public class Document : IDocument
     {
         public ObjectId Id { get; set; }
+        public string Name { get; set; }
     }
 }

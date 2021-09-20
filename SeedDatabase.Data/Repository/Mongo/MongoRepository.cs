@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using SeedDatabase.Data.Model;
 using SeedDatabase.Domain.Interfaces;
 using SeedDatabase.Domain.Models;
 
@@ -99,6 +100,20 @@ namespace SeedDatabase.Data.Repository.Mongo
                 _logger.LogError(ex, ex.Message);
             }
         }
+        public virtual async Task UpdateManyAsync(ObjectId objectId)
+        {
+            try
+            {
+                var filter = Builders<T>.Filter.Where(doc => doc.Id != objectId);
+
+                await _collection.UpdateManyAsync(filter, Builders<T>.Update.Set(x => x.Name, "John Fucking Doe"));
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+        }
         public virtual async Task DeleteOneAsync(Expression<Func<T, bool>> filterExpression)
         {
             try
@@ -171,6 +186,23 @@ namespace SeedDatabase.Data.Repository.Mongo
             try
             {
                 var c = await _collection.FindAsync(filterExpression);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            return documents.ToList();
+        }
+        public IEnumerable<Documento> FilterJoin()
+        {
+            IEnumerable<Documento> documents = null;
+
+            try
+            {
+                documents = _collection.Aggregate()
+                     .Lookup("Pessoa", "id_pessoa", "_id", "asPessoa")           
+                     .As<Documento>()
+                     .ToList();
             }
             catch (Exception ex)
             {

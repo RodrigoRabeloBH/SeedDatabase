@@ -24,9 +24,9 @@ namespace SeedDatabase
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-                await _services.RunMongoTest(5000000);
+                await _services.RunMongoTest(10000000);
 
-                // await _services.RunSQLServerTest(500000);
+                await _services.RunSQLServerTest(1000000);
 
                 i = 1;
 

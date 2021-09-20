@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SeedDatabase.Data.Model;
 using SeedDatabase.Domain.Interfaces;
 using SeedDatabase.Domain.Models;
@@ -15,26 +15,24 @@ namespace SeedDatabase.Services
     {
         private readonly ILogger<ApplicationServices> _logger;
         private readonly ISeedDatabaseServices _services;
-        private readonly IMongoRepository<DocumentoDbModel> _mongoDocumentoRepository;
         private readonly IMongoRepository<PessoaDbModel> _mongoPessoaRepository;
         private readonly ISqlRepository<Pessoa> _sqlPessoaRepository;
         private readonly ISqlRepository<Documento> _sqlDocumentoRepository;
+        private readonly IMongoRepository<DocumentoDbModel> _mongoDocumentoRepository;
         private readonly IMapper _mapper;
 
         public ApplicationServices(ILogger<ApplicationServices> logger, ISeedDatabaseServices services,
-                                   IMongoRepository<DocumentoDbModel> mongoDocumentoRepository, IMongoRepository<PessoaDbModel> mongoPessoaRepository,
-                                   ISqlRepository<Pessoa> sqlPessoaRepository, ISqlRepository<Documento> sqlDocumentoRepository,
-                                   IMapper mapper)
+            IMongoRepository<PessoaDbModel> mongoPessoaRepository, ISqlRepository<Pessoa> sqlPessoaRepository,
+            ISqlRepository<Documento> sqlDocumentoRepository, IMongoRepository<DocumentoDbModel> mongoDocumentoRepository, IMapper mapper)
         {
             _logger = logger;
             _services = services;
-            _mongoDocumentoRepository = mongoDocumentoRepository;
             _mongoPessoaRepository = mongoPessoaRepository;
             _sqlPessoaRepository = sqlPessoaRepository;
             _sqlDocumentoRepository = sqlDocumentoRepository;
+            _mongoDocumentoRepository = mongoDocumentoRepository;
             _mapper = mapper;
         }
-
         public async Task RunMongoTest(int buildQuantity)
         {
             _logger.LogInformation("Inicio dos testes Mongo: {time} ", DateTimeOffset.Now);
@@ -43,19 +41,13 @@ namespace SeedDatabase.Services
 
             var peoples = _mapper.Map<IEnumerable<PessoaDbModel>>(_services.BuildPersonList(buildQuantity));
 
-            var id = peoples.FirstOrDefault().Id_Pessoa;
-
-            var documents = _mapper.Map<IEnumerable<DocumentoDbModel>>(_services.BuildDocumentList(buildQuantity, id));
+            var id = Guid.Parse("62eeedd3-b8e7-424c-9398-7a9c2826a8b6");
 
             stopWatch.Start();
 
-            // await _mongoPessoaRepository.InsertManyAsync(peoples);
-
-            // await _mongoDocumentoRepository.InsertManyAsync(documents);
+            var pessoa = await _mongoPessoaRepository.FindOneAsync(p => p.Id_Pessoa == id);
 
             var pessoas = await _mongoPessoaRepository.GetAll();
-
-            // var documentos = await _mongoDocumentoRepository.GetAll();
 
             stopWatch.Stop();
 
@@ -67,21 +59,17 @@ namespace SeedDatabase.Services
 
             Stopwatch stopWatch = new Stopwatch();
 
-            var peoples = _services.BuildPersonList(buildQuantity);
-
-            var id = peoples.FirstOrDefault().Id_Pessoa;
-
-            var documents = _services.BuildDocumentList(buildQuantity, id);
+            var id = Guid.Parse("82A5C81B-4401-4914-B725-00000AF4A5EE");
 
             stopWatch.Start();
 
-            await _sqlPessoaRepository.InsertMany(peoples);
+            var pessoa = await _sqlPessoaRepository.FindOne(p => p.Id_Pessoa == id);
 
-            await _sqlDocumentoRepository.InsertMany(documents);
+            string pessoaJson = JsonConvert.SerializeObject(pessoa);
+
+            var pessoaClass = JsonConvert.DeserializeObject<Pessoa>(pessoaJson);
 
             var pessoas = await _sqlPessoaRepository.FindAll();
-
-            var documentos = await _sqlDocumentoRepository.FindAll();
 
             stopWatch.Stop();
 

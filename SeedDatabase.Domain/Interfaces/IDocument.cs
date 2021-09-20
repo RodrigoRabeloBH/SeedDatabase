@@ -8,5 +8,6 @@ namespace SeedDatabase.Domain.Interfaces
         [BsonId]
         [BsonRepresentation(BsonType.String)]
         ObjectId Id { get; set; }
+        string Name {  get; set; }
     }
 }
