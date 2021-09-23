@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SeedDatabase.Domain.Interfaces;
 using SeedDatabase.Services;
 
 namespace SeedDatabase
@@ -11,24 +12,29 @@ namespace SeedDatabase
     {
         private readonly ILogger<Worker> _logger;
         private readonly IApplicationServices _services;
-        public Worker(ILogger<Worker> logger, IApplicationServices services)
+        private readonly IDapperPessoaServices _dapperServices;
+        public Worker(ILogger<Worker> logger, IApplicationServices services, IDapperPessoaServices dapperServices)
         {
             _logger = logger;
             _services = services;
+            _dapperServices = dapperServices;
         }
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            int i = 0;
+            var cts = new CancellationTokenSource();
 
-            while (!stoppingToken.IsCancellationRequested && i != 1)
+            while (!cts.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-                await _services.RunMongoTest(10000000);
+                _dapperServices.InsertPessoaParallelSqlDapperTeste(1_000_000);
 
-                await _services.RunSQLServerTest(1000000);
+                var pessoas = await _dapperServices.SelectPessoasDapperTeste();
 
-                i = 1;
+                _dapperServices.UpdatePessoasParallelDapperTeste(pessoas);
+
+                cts.Cancel();
 
                 _logger.LogInformation("Worker finished at: {time}", DateTimeOffset.Now);
 

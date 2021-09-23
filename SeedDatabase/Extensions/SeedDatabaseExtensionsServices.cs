@@ -14,6 +14,8 @@ namespace SeedDatabase.Extensions
 
             services.AddTransient<IApplicationServices, ApplicationServices>();
 
+            services.AddTransient<IDapperPessoaServices, DapperPessoaServices>();
+
             services.AddAutoMapper(typeof(MappingProfiles));
 
             return services;

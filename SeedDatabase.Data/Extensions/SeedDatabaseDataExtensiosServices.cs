@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SeedDatabase.Data.Context;
 using SeedDatabase.Data.Repository;
 using SeedDatabase.Data.Repository.Mongo;
+using SeedDatabase.Data.Repository.SqlServer;
 using SeedDatabase.Domain.Interfaces;
 
 namespace SeedDatabase.Data.Extensions
@@ -17,6 +18,8 @@ namespace SeedDatabase.Data.Extensions
             services.AddTransient(typeof(IMongoRepository<>), typeof(MongoRepository<>));
 
             services.AddTransient(typeof(ISqlRepository<>), typeof(SqlRepository<>));
+
+            services.AddTransient<IDapperPessoaRepository, DapperPessoaRepository>();
 
             return services;
         }
